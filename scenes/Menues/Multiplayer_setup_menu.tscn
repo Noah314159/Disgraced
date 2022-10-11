@@ -63,11 +63,8 @@ margin_top = 123.0
 margin_right = 416.0
 margin_bottom = 227.0
 custom_fonts/font = SubResource( 2 )
-text = "Enter IP Address"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+placeholder_text = "Enter IP Address"
 
 [node name="Button" type="Button" parent="Multiplayer_config"]
 margin_right = 12.0
