@@ -30,11 +30,15 @@ func create_server() -> void:
 	server = NetworkedMultiplayerENet.new()
 	
 	var upnp = UPNP.new()
+
+	
 	var err = upnp.discover()
-	var error = upnp.add_port_mapping(DEFAULT_PORT )
+	var error1 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "UDP", 0)
+	var error2 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "TCP", 0)
 	ip_address= upnp.query_external_address()
 	print(err)
-	print(error)
+	print(error1)
+	print(error2)
 	
 	
 	server.create_server(DEFAULT_PORT, MAX_CLIENTS)
