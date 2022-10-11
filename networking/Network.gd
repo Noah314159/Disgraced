@@ -1,5 +1,6 @@
 extends Node
 
+onready var upnp = UPNP.new()
 
 const DEFAULT_PORT = 28960
 const MAX_CLIENTS = 3
@@ -28,8 +29,6 @@ func _ready():
 
 func create_server() -> void:
 	server = NetworkedMultiplayerENet.new()
-	
-	var upnp = UPNP.new()
 
 	
 	var err = upnp.discover()
@@ -48,6 +47,11 @@ func join_server() -> void:
 	client = NetworkedMultiplayerENet.new()
 	client.create_client(ip_address, DEFAULT_PORT)
 	get_tree().set_network_peer(client)
+
+func clear_ports():
+	upnp.discover()
+	upnp.delete_port_mapping(DEFAULT_PORT, "UDP")
+	upnp.delete_port_mapping(DEFAULT_PORT, "TCP")
 
 func _connected_to_server() -> void:
 	print("Successfully connected to server")

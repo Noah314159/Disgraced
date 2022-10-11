@@ -69,6 +69,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Button" type="Button" parent="Multiplayer_config"]
+margin_right = 12.0
+margin_bottom = 20.0
+text = "clear ports"
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Device_ip_address" type="Label" parent="CanvasLayer"]
@@ -85,3 +90,4 @@ __meta__ = {
 
 [connection signal="pressed" from="Multiplayer_config/Host_game" to="." method="_on_Host_game_pressed"]
 [connection signal="pressed" from="Multiplayer_config/Join_game" to="." method="_on_Join_game_pressed"]
+[connection signal="pressed" from="Multiplayer_config/Button" to="." method="_on_Button_pressed"]
