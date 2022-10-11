@@ -10,6 +10,8 @@ var client = null
 
 var ip_address = ""
 
+var use_upnp = true
+
 func _ready():
 	if OS.get_name() == "Windows":
 		ip_address = IP.get_local_addresses()[3]
@@ -19,7 +21,7 @@ func _ready():
 		ip_address = IP.get_local_addresses()[3]
 	
 	for ip in IP.get_local_addresses():
-		if ip.begins_with("192.168."):
+		if ip.begins_with("192.168.") and not ip.ends_with(".1"):
 			ip_address = ip
 			
 	get_tree().connect("connected_to_server", self, "_connected_to_server")
@@ -30,15 +32,15 @@ func _ready():
 func create_server() -> void:
 	server = NetworkedMultiplayerENet.new()
 
-	
-	var err = upnp.discover()
-	var error1 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "UDP", 0)
-	var error2 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "TCP", 0)
-	ip_address= upnp.query_external_address()
-	print(err)
-	print(error1)
-	print(error2)
-	
+	if use_upnp:
+		var err = upnp.discover()
+		var error1 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "UDP", 0)
+		var error2 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "TCP", 0)
+		print(err)
+		print(error1)
+		print(error2)
+		
+	ip_address = upnp.query_external_address()
 	
 	server.create_server(DEFAULT_PORT, MAX_CLIENTS)
 	get_tree().set_network_peer(server)
