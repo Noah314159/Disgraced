@@ -10,7 +10,9 @@ var client = null
 
 var ip_address = ""
 
-var use_upnp = true
+
+var networked_obj_name_idx = 0 setget networked_obj_name_idx_set
+puppet var puppet_networked_obj_name_idx = 0 setget puppet_networked_obj_name_idx_set
 
 func _ready():
 	if OS.get_name() == "Windows":
@@ -32,14 +34,9 @@ func _ready():
 func create_server() -> void:
 	server = NetworkedMultiplayerENet.new()
 
-	if use_upnp:
-		var err = upnp.discover()
-		var error1 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "UDP", 0)
-		var error2 = upnp.add_port_mapping(DEFAULT_PORT,0 ,"game test", "TCP", 0)
-		print(err)
-		print(error1)
-		print(error2)
-		
+
+	var err = upnp.discover()
+	print(err)
 	ip_address = upnp.query_external_address()
 	
 	server.create_server(DEFAULT_PORT, MAX_CLIENTS)
@@ -50,13 +47,18 @@ func join_server() -> void:
 	client.create_client(ip_address, DEFAULT_PORT)
 	get_tree().set_network_peer(client)
 
-func clear_ports():
-	upnp.discover()
-	upnp.delete_port_mapping(DEFAULT_PORT, "UDP")
-	upnp.delete_port_mapping(DEFAULT_PORT, "TCP")
 
 func _connected_to_server() -> void:
 	print("Successfully connected to server")
 
 func _server_disconnected() -> void:
 	print("Disconnected from server")
+
+
+func puppet_networked_obj_name_idx_set(value):
+	networked_obj_name_idx = value
+
+func networked_obj_name_idx_set(value):
+	networked_obj_name_idx = value
+	if get_tree().is_network_server():
+		rset("puppet_networked_obj_name_idx", networked_obj_name_idx)
